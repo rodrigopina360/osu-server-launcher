@@ -3,6 +3,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:osuserverlauncher"
+    xmlns:converters="using:osuserverlauncher.ValueConverters"
     xmlns:Interactions="using:Microsoft.Xaml.Interactions.Core"
     xmlns:Interactivity="using:Microsoft.Xaml.Interactivity"
     xmlns:sys="using:System"
@@ -10,21 +11,9 @@
     xmlns:d="http://schemas.microsoft.com/0expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:osuserverlauncher.ViewModels"
-    mc:Ignorable="d">
+  mc:Ignorable="d">
 
   <Grid RowDefinitions="30,auto,auto,*" Background="#F3F3F3">
-
-    <Interactivity:Interaction.Behaviors>
-      <Interactions:DataTriggerBehavior Binding="{x:Bind ViewModel.IsOsuRunning,Mode=OneWay}" ComparisonCondition="Equal" Value="true">
-        <Interactions:ChangePropertyAction TargetObject="{Binding ElementName=buttonLaunchOsu}" PropertyName="Content" Value="osu! is already running" />
-        <Interactions:ChangePropertyAction TargetObject="{Binding ElementName=buttonLaunchOsu}" PropertyName="IsEnabled" Value="false" />
-      </Interactions:DataTriggerBehavior>
-      <Interactions:DataTriggerBehavior Binding="{x:Bind ViewModel.IsOsuRunning,Mode=OneWay}" ComparisonCondition="Equal" Value="false">
-        <Interactions:ChangePropertyAction TargetObject="{Binding ElementName=buttonLaunchOsu}" PropertyName="Content" Value="Launch osu!" />
-        <Interactions:ChangePropertyAction TargetObject="{Binding ElementName=buttonLaunchOsu}" PropertyName="IsEnabled" Value="true" />
-      </Interactions:DataTriggerBehavior>
-    </Interactivity:Interaction.Behaviors>
-
     <StackPanel x:Name="titleBar" Orientation="Horizontal">
       <TextBlock Text="{x:Bind Title}" VerticalAlignment="Center" Margin="10,0,0,0" />
     </StackPanel>
@@ -72,8 +61,8 @@
                   <MenuFlyoutItem  Text="Edit Server" Icon="Edit" Click="EditServer_Click" />
                   <MenuFlyoutItem Text="Remove Server" Icon="Delete" Click="RemoveServer_Click" />
                   <MenuFlyoutSeparator />
-                  <MenuFlyoutItem Text="Move Up" Icon="Up" Click="MoveUp_Click"/>
-                  <MenuFlyoutItem Text="Move Down" Click="MoveDown_Click" />
+                  <MenuFlyoutItem IsEnabled="{x:Bind IsNotFirst}" Text="Move Up" Icon="Up" Click="MoveUp_Click"/>
+                  <MenuFlyoutItem IsEnabled="{x:Bind IsNotLast}" Text="Move Down" Click="MoveDown_Click" />
                 </MenuFlyout>
               </Grid.ContextFlyout>
               <Image Width="24" Height="24" Source="{x:Bind Icon32Url,Mode=OneWay}" />
@@ -98,7 +87,16 @@
           <TextBlock x:Name="textBlockDescription" TextWrapping="WrapWholeWords" FontSize="15"/>
         </ScrollViewer>
         <Button Grid.Row="2" VerticalAlignment="Bottom" x:Name="buttonLaunchOsu" Click="LaunchOsu_Click" Content="Launch osu!" Background="{ThemeResource LaunchOsuButtonBackground}" HorizontalAlignment="Stretch">
-
+          <Interactivity:Interaction.Behaviors>
+            <Interactions:DataTriggerBehavior Binding="{x:Bind ViewModel.IsOsuRunning,Mode=OneWay}" ComparisonCondition="Equal" Value="true">
+              <Interactions:ChangePropertyAction TargetObject="{Binding ElementName=buttonLaunchOsu}" PropertyName="Content" Value="osu! is already running" />
+              <Interactions:ChangePropertyAction TargetObject="{Binding ElementName=buttonLaunchOsu}" PropertyName="IsEnabled" Value="false" />
+            </Interactions:DataTriggerBehavior>
+            <Interactions:DataTriggerBehavior Binding="{x:Bind ViewModel.IsOsuRunning,Mode=OneWay}" ComparisonCondition="Equal" Value="false">
+              <Interactions:ChangePropertyAction TargetObject="{Binding ElementName=buttonLaunchOsu}" PropertyName="Content" Value="Launch osu!" />
+              <Interactions:ChangePropertyAction TargetObject="{Binding ElementName=buttonLaunchOsu}" PropertyName="IsEnabled" Value="true" />
+            </Interactions:DataTriggerBehavior>
+          </Interactivity:Interaction.Behaviors>
         </Button>
       </Grid>
     </Grid>

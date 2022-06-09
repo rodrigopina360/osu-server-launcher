@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using osuserverlauncher.Models;
+using osuserverlauncher.Infrastructure;
 
 namespace osuserverlauncher.ViewModels
 {
@@ -120,6 +121,13 @@ namespace osuserverlauncher.ViewModels
 
     #endregion
 
+    #region Properties for UI
+
+    public bool IsNotFirst => ConfigManager.Config.Servers.FirstOrDefault() != this;
+
+    public bool IsNotLast => ConfigManager.Config.Servers.LastOrDefault() != this;
+
+    #endregion
 
     public Server(string name, string domain)
     {
