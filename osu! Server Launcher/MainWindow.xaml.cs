@@ -75,6 +75,7 @@ namespace osuserverlauncher
       if (ViewModel.SelectedServer == null)
       {
         textBlockServerName.Text = "";
+        textBlockServerDomain.Text = "";
         textBlockDescription.Text = "";
         textBlockLastPlayed.Text = "";
         imageLogo.Source = null;
@@ -102,7 +103,7 @@ namespace osuserverlauncher
       {
         ResourceDictionary theme = (ResourceDictionary) Application.Current.Resources.ThemeDictionaries[App.Current.RequestedTheme.ToString()];
         textBlockDescription.FontStyle = FontStyle.Normal;
-        textBlockDescription.Foreground = (SolidColorBrush)theme["TextForeground"];
+        textBlockDescription.Foreground = (SolidColorBrush) theme["TextForeground"];
         textBlockDescription.Text = manifest.Description;
       }
     }
@@ -196,12 +197,15 @@ namespace osuserverlauncher
       ContentDialogResult result = await cd.ShowAsync();
       if (result == ContentDialogResult.Primary)
       {
+        bool isSelected = ViewModel.SelectedServer == server;
         int index = ViewModel.Config.Servers.IndexOf(server);
         ViewModel.Config.Servers.Remove(server);
         ConfigManager.Save();
-        ViewModel.SelectedServer = ViewModel.Config.Servers.Any()
-                    ? ViewModel.Config.Servers[index == ViewModel.Config.Servers.Count ? index - 1 : index]
-                    : null;
+
+        if (isSelected)
+          ViewModel.SelectedServer = ViewModel.Config.Servers.Any()
+                      ? ViewModel.Config.Servers[index == ViewModel.Config.Servers.Count ? index - 1 : index]
+                      : null;
       }
     }
 
