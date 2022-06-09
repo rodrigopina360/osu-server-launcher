@@ -61,8 +61,8 @@
                   <MenuFlyoutItem  Text="Edit Server" Icon="Edit" Click="EditServer_Click" />
                   <MenuFlyoutItem Text="Remove Server" Icon="Delete" Click="RemoveServer_Click" />
                   <MenuFlyoutSeparator />
-                  <MenuFlyoutItem IsEnabled="{x:Bind IsNotFirst}" Text="Move Up" Icon="Up" Click="MoveUp_Click"/>
-                  <MenuFlyoutItem IsEnabled="{x:Bind IsNotLast}" Text="Move Down" Click="MoveDown_Click" />
+                  <MenuFlyoutItem IsEnabled="{x:Bind IsNotFirst,Mode=OneWay}" Text="Move Up" Icon="Up" Click="MoveUp_Click"/>
+                  <MenuFlyoutItem IsEnabled="{x:Bind IsNotLast,Mode=OneWay}" Text="Move Down" Click="MoveDown_Click" />
                 </MenuFlyout>
               </Grid.ContextFlyout>
               <Image Width="24" Height="24" Source="{x:Bind Icon32Url,Mode=OneWay}" />
@@ -95,6 +95,12 @@
             <Interactions:DataTriggerBehavior Binding="{x:Bind ViewModel.IsOsuRunning,Mode=OneWay}" ComparisonCondition="Equal" Value="false">
               <Interactions:ChangePropertyAction TargetObject="{Binding ElementName=buttonLaunchOsu}" PropertyName="Content" Value="Launch osu!" />
               <Interactions:ChangePropertyAction TargetObject="{Binding ElementName=buttonLaunchOsu}" PropertyName="IsEnabled" Value="true" />
+            </Interactions:DataTriggerBehavior>
+            <Interactions:DataTriggerBehavior Binding="{x:Bind ViewModel.SelectedServer,Mode=OneWay}" ComparisonCondition="Equal" Value="{x:Null}">
+              <Interactions:ChangePropertyAction TargetObject="{Binding ElementName=buttonLaunchOsu}" PropertyName="Visibility" Value="Collapsed" />
+            </Interactions:DataTriggerBehavior>
+            <Interactions:DataTriggerBehavior Binding="{x:Bind ViewModel.SelectedServer,Mode=OneWay}" ComparisonCondition="NotEqual" Value="{x:Null}">
+              <Interactions:ChangePropertyAction TargetObject="{Binding ElementName=buttonLaunchOsu}" PropertyName="Visibility" Value="Visible" />
             </Interactions:DataTriggerBehavior>
           </Interactivity:Interaction.Behaviors>
         </Button>

@@ -71,7 +71,7 @@ namespace osuserverlauncher
 
     private async void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-      // TODO: put in xaml directly? Need to make that selectedserver = null makes bindings turn to blank texts
+      // TODO: put in xaml, need to make that selectedserver = null makes bindings turn to blank texts
       if (ViewModel.SelectedServer == null)
       {
         textBlockServerName.Text = "";
@@ -82,11 +82,12 @@ namespace osuserverlauncher
         return;
       }
 
-      // TODO: maybe put in xaml?
+      // TODO: put in xaml
       textBlockLastPlayed.Text = ViewModel.SelectedServer.LastPlayed != DateTime.MinValue ?
                                  $"Last played on {ViewModel.SelectedServer.LastPlayed.ToShortDateString()}" :
                                  "Never played";
 
+      // TODO: can this be put in xaml?
       textBlockDescription.FontStyle = FontStyle.Italic;
       textBlockDescription.Foreground = new SolidColorBrush(Colors.Gray);
       textBlockDescription.Text = "Loading..."; // clear description textblock before getting manifest
