@@ -55,14 +55,14 @@
           <DataTemplate x:DataType="vm:Server">
             <Grid ColumnDefinitions="auto,*">
               <Grid.ContextFlyout>
-                <MenuFlyout>
+                <MenuFlyout Opening="ListViewMenuFlyout_Opening">
                   <MenuFlyoutItem Text="Open in Web" Icon="Share" Click="OpenInWeb_Click"/>
                   <MenuFlyoutSeparator />
                   <MenuFlyoutItem  Text="Edit Server" Icon="Edit" Click="EditServer_Click" />
                   <MenuFlyoutItem Text="Remove Server" Icon="Delete" Click="RemoveServer_Click" />
                   <MenuFlyoutSeparator />
-                  <MenuFlyoutItem IsEnabled="{x:Bind IsNotFirst,Mode=OneWay}" Text="Move Up" Icon="Up" Click="MoveUp_Click"/>
-                  <MenuFlyoutItem IsEnabled="{x:Bind IsNotLast,Mode=OneWay}" Text="Move Down" Click="MoveDown_Click" />
+                  <MenuFlyoutItem Text="Move Up" Icon="Up" Click="MoveUp_Click"/>
+                  <MenuFlyoutItem Text="Move Down" Click="MoveDown_Click" />
                 </MenuFlyout>
               </Grid.ContextFlyout>
               <Image Width="24" Height="24" Source="{x:Bind Icon32Url,Mode=OneWay}" />

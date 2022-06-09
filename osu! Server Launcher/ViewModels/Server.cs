@@ -121,14 +121,6 @@ namespace osuserverlauncher.ViewModels
 
     #endregion
 
-    #region Properties for UI
-
-    public bool IsNotFirst => ConfigManager.Config.Servers.FirstOrDefault() != this;
-
-    public bool IsNotLast => ConfigManager.Config.Servers.LastOrDefault() != this;
-
-    #endregion
-
     public Server(string name, string domain)
     {
       Name = name;
