@@ -151,16 +151,20 @@ namespace osuserverlauncher
 
     private void OpenInWeb_Click(object sender, RoutedEventArgs e)
     {
+      Server server = (sender as MenuFlyoutItem).DataContext as Server;
+
       Process.Start(new ProcessStartInfo()
       {
-        FileName = $"https://{ViewModel.SelectedServer.Domain}",
+        FileName = $"https://{server.Domain}",
         UseShellExecute = true
       });
     }
 
     private async void EditServer_Click(object sender, RoutedEventArgs e)
     {
-      EditServerDialog cd = new EditServerDialog(ViewModel.SelectedServer.Clone()) // clone to only save when primary button clicked
+      Server server = (sender as MenuFlyoutItem).DataContext as Server;
+
+      EditServerDialog cd = new EditServerDialog(server.Clone()) // clone to only save when primary button clicked
       {
         XamlRoot = Content.XamlRoot
       };
@@ -168,7 +172,7 @@ namespace osuserverlauncher
       ContentDialogResult result = await cd.ShowAsync();
       if (result == ContentDialogResult.Primary)
       {
-        int index = ViewModel.Config.Servers.IndexOf(ViewModel.SelectedServer);
+        int index = ViewModel.Config.Servers.IndexOf(server);
         ViewModel.Config.Servers[index] = cd.Server;
         ViewModel.SelectedServer = cd.Server;
         ConfigManager.Save();
@@ -177,9 +181,11 @@ namespace osuserverlauncher
 
     private async void RemoveServer_Click(object sender, RoutedEventArgs e)
     {
+      Server server = (sender as MenuFlyoutItem).DataContext as Server;
+
       ContentDialog cd = new ContentDialog()
       {
-        Title = $"Do you want to remove '{ViewModel.SelectedServer.Name}'?",
+        Title = $"Do you want to remove '{server.Name}'?",
         Content = "This includes credentials you may have saved. This action cannot be undone.",
         PrimaryButtonText = "Remove",
         CloseButtonText = "Cancel",
@@ -190,9 +196,8 @@ namespace osuserverlauncher
       ContentDialogResult result = await cd.ShowAsync();
       if (result == ContentDialogResult.Primary)
       {
-        Server toRemove = ViewModel.SelectedServer;
-        int index = ViewModel.Config.Servers.IndexOf(toRemove);
-        ViewModel.Config.Servers.Remove(toRemove);
+        int index = ViewModel.Config.Servers.IndexOf(server);
+        ViewModel.Config.Servers.Remove(server);
         ConfigManager.Save();
         ViewModel.SelectedServer = ViewModel.Config.Servers.Any()
                     ? ViewModel.Config.Servers[index == ViewModel.Config.Servers.Count ? index - 1 : index]
@@ -202,7 +207,8 @@ namespace osuserverlauncher
 
     private void MoveUp_Click(object sender, RoutedEventArgs e)
     {
-      Server server = ViewModel.SelectedServer;
+      Server server = (sender as MenuFlyoutItem).DataContext as Server;
+
       int index = ViewModel.Config.Servers.IndexOf(server);
       ViewModel.Config.Servers.Move(index, index - 1);
       ViewModel.SelectedServer = server;
@@ -211,7 +217,8 @@ namespace osuserverlauncher
 
     private void MoveDown_Click(object sender, RoutedEventArgs e)
     {
-      Server server = ViewModel.SelectedServer;
+      Server server = (sender as MenuFlyoutItem).DataContext as Server;
+
       int index = ViewModel.Config.Servers.IndexOf(server);
       ViewModel.Config.Servers.Move(index, index + 1);
       ViewModel.SelectedServer = server;
