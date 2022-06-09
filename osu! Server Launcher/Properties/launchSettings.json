@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "osuserverlauncher (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "osuserverlauncher (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
