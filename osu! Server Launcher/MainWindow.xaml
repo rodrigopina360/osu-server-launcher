@@ -55,7 +55,7 @@
           <DataTemplate x:DataType="vm:Server">
             <Grid ColumnDefinitions="auto,*">
               <Grid.ContextFlyout>
-                <MenuFlyout Opening="ListViewMenuFlyout_Opening">
+                <MenuFlyout>
                   <MenuFlyoutItem Text="Open in Web" Icon="Share" Click="OpenInWeb_Click"/>
                   <MenuFlyoutSeparator />
                   <MenuFlyoutItem  Text="Edit Server" Icon="Edit" Click="EditServer_Click" />
