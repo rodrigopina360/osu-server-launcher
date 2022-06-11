@@ -19,13 +19,12 @@ using osuserverlauncher.Utils;
 using osuserverlauncher.ViewModels;
 
 namespace osuserverlauncher.Dialogs;
-
 public sealed partial class AddServerDialog : ContentDialog
 {
   private ServerDialogViewModel ViewModel = new();
   private Config m_config = null;
 
-  public Server Server => ViewModel.Server;
+  public Server Server => ViewModel.Server; 
 
   public bool SaveCredentials { get; private set; }
 
