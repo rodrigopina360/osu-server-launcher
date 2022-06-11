@@ -9,8 +9,8 @@ using osuserverlauncher.Models;
 namespace osuserverlauncher.ViewModels;
 public class ServerDialogViewModel : PropertyChangedBase
 {
-  private Server m_server = new Server("", "");
-  public Server Server
+  private ServerViewModel m_server = new ServerViewModel();
+  public ServerViewModel Server
   {
     get => m_server;
     set => SetField(ref m_server, value);

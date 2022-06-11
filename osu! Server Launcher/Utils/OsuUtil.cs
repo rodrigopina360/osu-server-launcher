@@ -11,7 +11,7 @@ namespace osuserverlauncher.Utils
 {
   public class OsuUtil
   {
-    public static void SetServerCredentials(string configFile, Server server)
+    public static void SetServerCredentials(string configFile, ServerViewModel server)
     {
       string[] lines = File.ReadAllLines(configFile);
       for (int i = 0; i < lines.Length; i++)

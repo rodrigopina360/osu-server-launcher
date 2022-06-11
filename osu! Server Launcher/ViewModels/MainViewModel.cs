@@ -14,17 +14,17 @@ namespace osuserverlauncher.ViewModels
 {
   public class MainViewModel : PropertyChangedBase
   {
-    public Config Config { get; }
+    public ObservableCollection<ServerViewModel> Servers { get; }
 
-    private Server m_selectedServer = null;
-    public Server SelectedServer
+    private ServerViewModel m_selectedServer = null;
+    public ServerViewModel SelectedServer
     {
       get => m_selectedServer;
       set => SetField(ref m_selectedServer, value);
     }
 
-    private Server m_connectedServer = null;
-    public Server ConnectedServer
+    private ServerViewModel m_connectedServer = null;
+    public ServerViewModel ConnectedServer
     {
       get => m_connectedServer;
       set => m_connectedServer = value; // FUTURE: notify property changed if necessary
@@ -37,12 +37,12 @@ namespace osuserverlauncher.ViewModels
       set => SetField(ref m_isOsuRunning, value);
     }
 
-    public MainViewModel(Config config)
+    public MainViewModel(ObservableCollection<ServerViewModel> servers)
     {
-      Config = config;
+      Servers = servers;
 
-      if (Config.Servers.Any())
-        m_selectedServer = Config.Servers[0];
+      if (Servers.Any())
+        m_selectedServer = Servers[0];
     }
   }
 }

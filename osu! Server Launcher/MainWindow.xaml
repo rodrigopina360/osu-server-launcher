@@ -48,11 +48,11 @@
     <InfoBar Grid.Row="2" x:Name="infoBar" />
 
     <Grid Margin="10,0,10,10" Grid.Row="3" ColumnDefinitions="150,*">
-      <ListView ItemsSource="{x:Bind ViewModel.Config.Servers,Mode=OneWay}"
+      <ListView ItemsSource="{x:Bind ViewModel.Servers,Mode=OneWay}"
               SelectedItem="{x:Bind ViewModel.SelectedServer,Mode=TwoWay}"
               SelectionChanged="ListView_SelectionChanged">
         <ListView.ItemTemplate>
-          <DataTemplate x:DataType="vm:Server">
+          <DataTemplate x:DataType="vm:ServerViewModel">
             <Grid ColumnDefinitions="auto,*">
               <Grid.ContextFlyout>
                 <MenuFlyout>

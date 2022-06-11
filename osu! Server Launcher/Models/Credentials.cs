@@ -23,7 +23,7 @@ public class Credentials
 
   private string m_password = "";
   [JsonIgnore]
-  public string PlainPassword
+  public string PlainPassword 
   {
     get => m_password;
     set => m_password = value;

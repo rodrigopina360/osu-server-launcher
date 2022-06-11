@@ -16,34 +16,35 @@ using osuserverlauncher.Infrastructure;
 using osuserverlauncher.Models;
 using osuserverlauncher.Utils;
 using osuserverlauncher.ViewModels;
+using System.Collections.ObjectModel;
 
 namespace osuserverlauncher.Dialogs;
 
 public sealed partial class EditServerDialog : ContentDialog
 {
-  private ServerDialogViewModel ViewModel = new();
-  private Config m_config = null;
+  public ServerDialogViewModel ViewModel = new();
 
-  public Server Server => ViewModel.Server;
-
+  private ObservableCollection<ServerViewModel> m_servers = null;
+  private Credentials m_cachedCredentials = null;
   private string m_uneditedName = "";
 
-  public EditServerDialog(Server server, Config config)
+  public EditServerDialog(ServerViewModel server, ObservableCollection<ServerViewModel> servers)
   {
     this.InitializeComponent();
 
-    m_uneditedName = server.Name;
     ViewModel.Server = server;
+    m_uneditedName = server.Name;
+    m_servers = servers;
+
     checkBoxAddCredentials.IsChecked = server.Credentials != null;
-    m_config = config;
   }
   private void UpdateIsPrimaryButtonEnabled(object sender, TextChangedEventArgs e)
   {
-    IsPrimaryButtonEnabled = Server.Name != "" && Server.Domain != ""
-                          && (m_uneditedName == Server.Name || !m_config.Servers.Any(x => x.Name.ToLower() == Server.Name.ToLower()))
-                          && (!checkBoxAddCredentials.IsChecked.Value || Server.Credentials.Username != "" && StringUtil.TrimServerDomain(Server.Credentials.PlainPassword) != "");
+    ViewModel.ServerAlreadyExists = m_uneditedName != ViewModel.Server.Name && m_servers.Any(x => x.Name.ToLower() == ViewModel.Server.Name.ToLower());
 
-    ViewModel.ServerAlreadyExists = m_uneditedName != Server.Name && m_config.Servers.Any(x => x.Name.ToLower() == Server.Name.ToLower());
+    IsPrimaryButtonEnabled = ViewModel.Server.Name != "" && ViewModel.Server.Domain != ""
+                          && !ViewModel.ServerAlreadyExists
+                          && (!checkBoxAddCredentials.IsChecked.Value || ViewModel.Server.Credentials.Username != "" && StringUtil.TrimServerDomain(ViewModel.Server.Credentials.PlainPassword) != "");
   }
 
   private void PasswordChanged(object sender, RoutedEventArgs e)
@@ -53,10 +54,13 @@ public sealed partial class EditServerDialog : ContentDialog
 
   private void checkBoxAddCredentials_CheckedChanged(object sender, RoutedEventArgs e)
   {
-    if (checkBoxAddCredentials.IsChecked.Value && Server.Credentials == null)
-      Server.Credentials = new Credentials("", "");
-    else if (!checkBoxAddCredentials.IsChecked.Value)
-      Server.Credentials = null;
+    if (checkBoxAddCredentials.IsChecked.Value)
+      ViewModel.Server.Credentials = m_cachedCredentials ?? new Credentials("", "");
+    else
+    {
+      m_cachedCredentials = ViewModel.Server.Credentials;
+      ViewModel.Server.Credentials = null;
+    }
 
     UpdateIsPrimaryButtonEnabled(sender, null);
   }

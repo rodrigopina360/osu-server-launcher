@@ -17,30 +17,30 @@ using osuserverlauncher.Infrastructure;
 using osuserverlauncher.Models;
 using osuserverlauncher.Utils;
 using osuserverlauncher.ViewModels;
+using System.Collections.ObjectModel;
 
 namespace osuserverlauncher.Dialogs;
 public sealed partial class AddServerDialog : ContentDialog
 {
-  private ServerDialogViewModel ViewModel = new();
-  private Config m_config = null;
+  public ServerDialogViewModel ViewModel { get; } = new();
 
-  public Server Server => ViewModel.Server; 
+  private ObservableCollection<ServerViewModel> m_servers = null;
+  private Credentials m_cachedCredentials = null;
 
-  public bool SaveCredentials { get; private set; }
-
-  public AddServerDialog(Config config)
+  public AddServerDialog(ObservableCollection<ServerViewModel> servers)
   {
     this.InitializeComponent();
-    m_config = config;
+    m_servers = servers;
   }
 
   private void UpdateIsPrimaryButtonEnabled(object sender, TextChangedEventArgs e)
   {
-    IsPrimaryButtonEnabled = Server.Name != "" && Server.Domain != ""
-                          && !m_config.Servers.Any(x => x.Name.ToLower() == Server.Name.ToLower())
-                          && (!checkBoxAddCredentials.IsChecked.Value || Server.Credentials.Username != "" && StringUtil.TrimServerDomain(Server.Credentials.PlainPassword) != "");
+    ViewModel.ServerAlreadyExists = m_servers.Any(x => x.Name.ToLower() == ViewModel.Server.Name.ToLower());
 
-    ViewModel.ServerAlreadyExists = m_config.Servers.Any(x => x.Name.ToLower() == Server.Name.ToLower());
+    IsPrimaryButtonEnabled = ViewModel.Server.Name != "" && ViewModel.Server.Domain != ""
+                          && !ViewModel.ServerAlreadyExists
+                          && (!checkBoxAddCredentials.IsChecked.Value || ViewModel.Server.Credentials.Username != "" && StringUtil.TrimServerDomain(ViewModel.Server.Credentials.PlainPassword) != "");
+
   }
 
   private void PasswordChanged(object sender, RoutedEventArgs e)
@@ -48,16 +48,14 @@ public sealed partial class AddServerDialog : ContentDialog
     UpdateIsPrimaryButtonEnabled(sender, null);
   }
 
-  private Credentials m_cached = null;
-
   private void checkBoxAddCredentials_CheckedChanged(object sender, RoutedEventArgs e)
   {
     if (checkBoxAddCredentials.IsChecked.Value)
-      Server.Credentials = m_cached ?? new Credentials("", "");
+      ViewModel.Server.Credentials = m_cachedCredentials ?? new Credentials("", "");
     else
     {
-      m_cached = Server.Credentials;
-      Server.Credentials = null;
+      m_cachedCredentials = ViewModel.Server.Credentials;
+      ViewModel.Server.Credentials = null;
     }
 
     UpdateIsPrimaryButtonEnabled(sender, null);

@@ -30,6 +30,7 @@ using osuserverlauncher.Services;
 using osuserverlauncher.Utils;
 using osuserverlauncher.ViewModels;
 using DiscordRPC;
+using System.Collections.ObjectModel;
 
 // To learn more about osuserverlauncher, the osuserverlauncher project structure,
 // and more about our project templates, see: http://aka.ms/osuserverlauncher-project-info.
@@ -48,7 +49,7 @@ namespace osuserverlauncher
     {
       this.InitializeComponent();
 
-      ViewModel = new MainViewModel(configManager.Config);
+      ViewModel = new MainViewModel(new ObservableCollection<ServerViewModel>(configManager.Config.Servers.Select(x => new ServerViewModel(x))));
       m_configManager = configManager;
 
 #if DEBUG
@@ -99,6 +100,7 @@ namespace osuserverlauncher
                                                 // to not show the currently displayed one when switching
       OSLManifest manifest = await ViewModel.SelectedServer.GetManifest();
 
+      // TODO: can this be put in xaml?
       if (manifest.Description == "")
       {
         textBlockDescription.FontStyle = FontStyle.Italic;
@@ -149,6 +151,7 @@ namespace osuserverlauncher
 
       ViewModel.ConnectedServer = ViewModel.SelectedServer;
       ViewModel.SelectedServer.LastPlayed = DateTime.Now;
+      m_configManager.Config.Servers = ViewModel.Servers.Select(x => x.ToModel()).ToList();
       m_configManager.Save();
     }
 
@@ -158,7 +161,7 @@ namespace osuserverlauncher
 
     private void OpenInWeb_Click(object sender, RoutedEventArgs e)
     {
-      Server server = (sender as MenuFlyoutItem).DataContext as Server;
+      ServerViewModel server = (sender as MenuFlyoutItem).DataContext as ServerViewModel;
 
       Process.Start(new ProcessStartInfo()
       {
@@ -169,9 +172,9 @@ namespace osuserverlauncher
 
     private async void EditServer_Click(object sender, RoutedEventArgs e)
     {
-      Server server = (sender as MenuFlyoutItem).DataContext as Server;
+      ServerViewModel server = (sender as MenuFlyoutItem).DataContext as ServerViewModel;
 
-      EditServerDialog cd = new EditServerDialog(server.Clone(), m_configManager.Config) // clone to only save when primary button clicked
+      EditServerDialog cd = new EditServerDialog(server.Clone(), ViewModel.Servers) // clone to only save when primary button clicked
       {
         XamlRoot = Content.XamlRoot
       };
@@ -179,16 +182,17 @@ namespace osuserverlauncher
       ContentDialogResult result = await cd.ShowAsync();
       if (result == ContentDialogResult.Primary)
       {
-        int index = ViewModel.Config.Servers.IndexOf(server);
-        ViewModel.Config.Servers[index] = cd.Server;
-        ViewModel.SelectedServer = cd.Server;
+        int index = ViewModel.Servers.IndexOf(server);
+        ViewModel.Servers[index] = cd.ViewModel.Server;
+        m_configManager.Config.Servers = ViewModel.Servers.Select(x => x.ToModel()).ToList();
+        ViewModel.SelectedServer = cd.ViewModel.Server;
         m_configManager.Save();
       }
     }
 
     private async void RemoveServer_Click(object sender, RoutedEventArgs e)
     {
-      Server server = (sender as MenuFlyoutItem).DataContext as Server;
+      ServerViewModel server = (sender as MenuFlyoutItem).DataContext as ServerViewModel;
 
       ContentDialog cd = new ContentDialog()
       {
@@ -204,33 +208,36 @@ namespace osuserverlauncher
       if (result == ContentDialogResult.Primary)
       {
         bool isSelected = ViewModel.SelectedServer == server;
-        int index = ViewModel.Config.Servers.IndexOf(server);
-        ViewModel.Config.Servers.Remove(server);
+        int index = ViewModel.Servers.IndexOf(server);
+        ViewModel.Servers.Remove(server);
+        m_configManager.Config.Servers = ViewModel.Servers.Select(x => x.ToModel()).ToList();
         m_configManager.Save();
 
         if (isSelected)
-          ViewModel.SelectedServer = ViewModel.Config.Servers.Any()
-                      ? ViewModel.Config.Servers[index == ViewModel.Config.Servers.Count ? index - 1 : index]
+          ViewModel.SelectedServer = ViewModel.Servers.Any()
+                      ? ViewModel.Servers[index == ViewModel.Servers.Count ? index - 1 : index]
                       : null;
       }
     }
 
     private void MoveUp_Click(object sender, RoutedEventArgs e)
     {
-      Server server = (sender as MenuFlyoutItem).DataContext as Server;
+      ServerViewModel server = (sender as MenuFlyoutItem).DataContext as ServerViewModel;
 
-      int index = ViewModel.Config.Servers.IndexOf(server);
-      ViewModel.Config.Servers.Move(index, index - 1);
+      int index = ViewModel.Servers.IndexOf(server);
+      ViewModel.Servers.Move(index, index - 1);
+      m_configManager.Config.Servers = ViewModel.Servers.Select(x => x.ToModel()).ToList();
       ViewModel.SelectedServer = server;
       m_configManager.Save();
     }
 
     private void MoveDown_Click(object sender, RoutedEventArgs e)
     {
-      Server server = (sender as MenuFlyoutItem).DataContext as Server;
+      ServerViewModel server = (sender as MenuFlyoutItem).DataContext as ServerViewModel;
 
-      int index = ViewModel.Config.Servers.IndexOf(server);
-      ViewModel.Config.Servers.Move(index, index + 1);
+      int index = ViewModel.Servers.IndexOf(server);
+      ViewModel.Servers.Move(index, index + 1);
+      m_configManager.Config.Servers = ViewModel.Servers.Select(x => x.ToModel()).ToList();
       ViewModel.SelectedServer = server;
       m_configManager.Save();
     }
@@ -243,7 +250,7 @@ namespace osuserverlauncher
 
     private async void AddServer_Click(object sender, RoutedEventArgs e)
     {
-      AddServerDialog asd = new AddServerDialog(m_configManager.Config)
+      AddServerDialog asd = new AddServerDialog(ViewModel.Servers)
       {
         XamlRoot = Content.XamlRoot
       };
@@ -251,8 +258,9 @@ namespace osuserverlauncher
       ContentDialogResult result = await asd.ShowAsync();
       if (result == ContentDialogResult.Primary)
       {
-        ViewModel.Config.Servers.Add(asd.Server);
-        ViewModel.SelectedServer = asd.Server;
+        ViewModel.Servers.Add(asd.ViewModel.Server);
+        m_configManager.Config.Servers = ViewModel.Servers.Select(x => x.ToModel()).ToList();
+        ViewModel.SelectedServer = asd.ViewModel.Server;
         m_configManager.Save();
       }
     }
