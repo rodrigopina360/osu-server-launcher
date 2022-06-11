@@ -48,11 +48,9 @@ namespace osuserverlauncher
       string programdata = Path.Combine(Environment.GetEnvironmentVariable("localappdata"), "osu! Server Launcher");
       string configfile = Path.Combine(programdata, "config.json");
 
-      ConfigManager.Initialize(configfile);
-      ConfigManager.Load();
-      ConfigManager.Save();
+      ConfigManager config = new ConfigManager(configfile);
 
-      m_window = new MainWindow();
+      m_window = new MainWindow(config);
       m_window.Activate();
     }
 

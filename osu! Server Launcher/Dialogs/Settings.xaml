@@ -13,7 +13,7 @@
   <ScrollViewer>
     <StackPanel>
       <TextBlock Text="You can customize everything about the client and it's features here." />
-      <ToggleSwitch OnContent="Show Discord RPC" OffContent="Show Discord RPC" IsOn="{x:Bind Config.ShowDiscordRPC,Mode=TwoWay}" />
+      <ToggleSwitch OnContent="Show Discord RPC" OffContent="Show Discord RPC" />
     </StackPanel>
   </ScrollViewer>
 </ContentDialog>

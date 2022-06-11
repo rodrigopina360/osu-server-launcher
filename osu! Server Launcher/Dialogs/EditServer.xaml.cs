@@ -22,26 +22,28 @@ namespace osuserverlauncher.Dialogs;
 public sealed partial class EditServerDialog : ContentDialog
 {
   private ServerDialogViewModel ViewModel = new();
+  private Config m_config = null;
 
   public Server Server => ViewModel.Server;
 
   private string m_uneditedName = "";
 
-  public EditServerDialog(Server server)
+  public EditServerDialog(Server server, Config config)
   {
     this.InitializeComponent();
 
     m_uneditedName = server.Name;
     ViewModel.Server = server;
     checkBoxAddCredentials.IsChecked = server.Credentials != null;
+    m_config = config;
   }
   private void UpdateIsPrimaryButtonEnabled(object sender, TextChangedEventArgs e)
   {
     IsPrimaryButtonEnabled = Server.Name != "" && Server.Domain != ""
-                          && (m_uneditedName == Server.Name || !ConfigManager.Config.Servers.Any(x => x.Name.ToLower() == Server.Name.ToLower()))
+                          && (m_uneditedName == Server.Name || !m_config.Servers.Any(x => x.Name.ToLower() == Server.Name.ToLower()))
                           && (!checkBoxAddCredentials.IsChecked.Value || Server.Credentials.Username != "" && StringUtil.TrimServerDomain(Server.Credentials.PlainPassword) != "");
 
-    ViewModel.ServerAlreadyExists = m_uneditedName != Server.Name && ConfigManager.Config.Servers.Any(x => x.Name.ToLower() == Server.Name.ToLower());
+    ViewModel.ServerAlreadyExists = m_uneditedName != Server.Name && m_config.Servers.Any(x => x.Name.ToLower() == Server.Name.ToLower());
   }
 
   private void PasswordChanged(object sender, RoutedEventArgs e)

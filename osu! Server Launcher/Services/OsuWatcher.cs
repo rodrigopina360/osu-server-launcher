@@ -14,7 +14,7 @@ public static class OsuWatcher
 {
   private static DispatcherQueueTimer m_timer = null;
 
-  public static void Start(MainViewModel viewModel)
+  public static void Start(MainViewModel viewModel, DiscordRPCManager discordRpcManager)
   {
     m_timer = DispatcherQueueController.CreateOnDedicatedThread().DispatcherQueue.CreateTimer();
     m_timer.Interval = TimeSpan.FromSeconds(1);
@@ -29,16 +29,14 @@ public static class OsuWatcher
         string details = $"{viewModel.ConnectedServer.Credentials?.Username ?? "?"} - {viewModel.ConnectedServer.Domain}";
 
         if (title == "osu!")
-          Infrastructure.DiscordRPC.SetPresence(details, "Idle");
+          discordRpcManager.SetPresence(details, "Idle");
         else if (title.StartsWith("osu!  -"))
-            Infrastructure.DiscordRPC.SetPresence(details, $"{(title.EndsWith(".osu") ? "Editing" : "Playing")} {title.Substring(8)}");
+          discordRpcManager.SetPresence(details, $"{(title.EndsWith(".osu") ? "Editing" : "Playing")} {title.Substring(8)}");
       }
       else
       {
         viewModel.ConnectedServer = null;
-
-        if (Infrastructure.DiscordRPC.IsPresenceSet)
-          Infrastructure.DiscordRPC.ClearPresence();
+        discordRpcManager.ClearPresence();
       }
     };
 

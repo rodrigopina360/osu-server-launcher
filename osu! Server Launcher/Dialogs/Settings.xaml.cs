@@ -24,8 +24,6 @@ namespace osuserverlauncher.Dialogs;
 /// </summary>
 public sealed partial class SettingsDialog : ContentDialog
 {
-  public Config Config => ConfigManager.Config;
-
   public SettingsDialog()
   {
     this.InitializeComponent();

@@ -14,7 +14,7 @@ namespace osuserverlauncher.ViewModels
 {
   public class MainViewModel : PropertyChangedBase
   {
-    public Config Config => ConfigManager.Config;
+    public Config Config { get; }
 
     private Server m_selectedServer = null;
     public Server SelectedServer
@@ -37,8 +37,10 @@ namespace osuserverlauncher.ViewModels
       set => SetField(ref m_isOsuRunning, value);
     }
 
-    public MainViewModel()
+    public MainViewModel(Config config)
     {
+      Config = config;
+
       if (Config.Servers.Any())
         m_selectedServer = Config.Servers[0];
     }

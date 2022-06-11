@@ -23,23 +23,25 @@ namespace osuserverlauncher.Dialogs;
 public sealed partial class AddServerDialog : ContentDialog
 {
   private ServerDialogViewModel ViewModel = new();
+  private Config m_config = null;
 
   public Server Server => ViewModel.Server;
 
   public bool SaveCredentials { get; private set; }
 
-  public AddServerDialog()
+  public AddServerDialog(Config config)
   {
     this.InitializeComponent();
+    m_config = config;
   }
 
   private void UpdateIsPrimaryButtonEnabled(object sender, TextChangedEventArgs e)
   {
     IsPrimaryButtonEnabled = Server.Name != "" && Server.Domain != ""
-                          && !ConfigManager.Config.Servers.Any(x => x.Name.ToLower() == Server.Name.ToLower())
+                          && !m_config.Servers.Any(x => x.Name.ToLower() == Server.Name.ToLower())
                           && (!checkBoxAddCredentials.IsChecked.Value || Server.Credentials.Username != "" && StringUtil.TrimServerDomain(Server.Credentials.PlainPassword) != "");
 
-    ViewModel.ServerAlreadyExists = ConfigManager.Config.Servers.Any(x => x.Name.ToLower() == Server.Name.ToLower());
+    ViewModel.ServerAlreadyExists = m_config.Servers.Any(x => x.Name.ToLower() == Server.Name.ToLower());
   }
 
   private void PasswordChanged(object sender, RoutedEventArgs e)

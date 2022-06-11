@@ -29,6 +29,7 @@ using osuserverlauncher.Models;
 using osuserverlauncher.Services;
 using osuserverlauncher.Utils;
 using osuserverlauncher.ViewModels;
+using DiscordRPC;
 
 // To learn more about osuserverlauncher, the osuserverlauncher project structure,
 // and more about our project templates, see: http://aka.ms/osuserverlauncher-project-info.
@@ -40,18 +41,22 @@ namespace osuserverlauncher
   /// </summary>
   public sealed partial class MainWindow : Window
   {
-    private MainViewModel ViewModel = new();
+    private MainViewModel ViewModel = null;
+    private ConfigManager m_configManager = null;
 
-    public MainWindow()
+    public MainWindow(ConfigManager configManager)
     {
       this.InitializeComponent();
+
+      ViewModel = new MainViewModel(configManager.Config);
+      m_configManager = configManager;
 
 #if DEBUG
       AppWindow appWindow = AppWindow.GetFromWindowId(Win32Interop.GetWindowIdFromWindow(WindowNative.GetWindowHandle(this)));
       appWindow.Resize(new SizeInt32(650, 500));
 #endif
 
-      OsuWatcher.Start(ViewModel);
+      OsuWatcher.Start(ViewModel, new DiscordRPCManager(new DiscordRpcClient("770355757622755379", -1)));
 
       ExtendsContentIntoTitleBar = true;
       SetTitleBar(titleBar);
@@ -144,7 +149,7 @@ namespace osuserverlauncher
 
       ViewModel.ConnectedServer = ViewModel.SelectedServer;
       ViewModel.SelectedServer.LastPlayed = DateTime.Now;
-      ConfigManager.Save();
+      m_configManager.Save();
     }
 
     #endregion
@@ -166,7 +171,7 @@ namespace osuserverlauncher
     {
       Server server = (sender as MenuFlyoutItem).DataContext as Server;
 
-      EditServerDialog cd = new EditServerDialog(server.Clone()) // clone to only save when primary button clicked
+      EditServerDialog cd = new EditServerDialog(server.Clone(), m_configManager.Config) // clone to only save when primary button clicked
       {
         XamlRoot = Content.XamlRoot
       };
@@ -177,7 +182,7 @@ namespace osuserverlauncher
         int index = ViewModel.Config.Servers.IndexOf(server);
         ViewModel.Config.Servers[index] = cd.Server;
         ViewModel.SelectedServer = cd.Server;
-        ConfigManager.Save();
+        m_configManager.Save();
       }
     }
 
@@ -201,7 +206,7 @@ namespace osuserverlauncher
         bool isSelected = ViewModel.SelectedServer == server;
         int index = ViewModel.Config.Servers.IndexOf(server);
         ViewModel.Config.Servers.Remove(server);
-        ConfigManager.Save();
+        m_configManager.Save();
 
         if (isSelected)
           ViewModel.SelectedServer = ViewModel.Config.Servers.Any()
@@ -217,7 +222,7 @@ namespace osuserverlauncher
       int index = ViewModel.Config.Servers.IndexOf(server);
       ViewModel.Config.Servers.Move(index, index - 1);
       ViewModel.SelectedServer = server;
-      ConfigManager.Save();
+      m_configManager.Save();
     }
 
     private void MoveDown_Click(object sender, RoutedEventArgs e)
@@ -227,7 +232,7 @@ namespace osuserverlauncher
       int index = ViewModel.Config.Servers.IndexOf(server);
       ViewModel.Config.Servers.Move(index, index + 1);
       ViewModel.SelectedServer = server;
-      ConfigManager.Save();
+      m_configManager.Save();
     }
 
     #endregion
@@ -238,7 +243,7 @@ namespace osuserverlauncher
 
     private async void AddServer_Click(object sender, RoutedEventArgs e)
     {
-      AddServerDialog asd = new AddServerDialog()
+      AddServerDialog asd = new AddServerDialog(m_configManager.Config)
       {
         XamlRoot = Content.XamlRoot
       };
@@ -248,7 +253,7 @@ namespace osuserverlauncher
       {
         ViewModel.Config.Servers.Add(asd.Server);
         ViewModel.SelectedServer = asd.Server;
-        ConfigManager.Save();
+        m_configManager.Save();
       }
     }
 
@@ -261,7 +266,7 @@ namespace osuserverlauncher
       };
 
       await sd.ShowAsync();
-      ConfigManager.Save();
+      m_configManager.Save();
 #endif
     }
 

@@ -6,13 +6,16 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace osuserverlauncher.Infrastructure;
-public static class DiscordRPC
+public class DiscordRPCManager
 {
-  private static DiscordRpcClient m_client = new DiscordRpcClient("770355757622755379", -1);
+  private DiscordRpcClient m_client = null;
 
-  public static bool IsPresenceSet { get; private set; }
+  public DiscordRPCManager(DiscordRpcClient client)
+  {
+    m_client = client;
+  }
 
-  public static void SetPresence(string details, string state)
+  public void SetPresence(string details, string state)
   {
     if (!m_client.IsInitialized)
       m_client.Initialize();
@@ -33,12 +36,11 @@ public static class DiscordRPC
     };
 
     m_client.SetPresence(presence);
-    IsPresenceSet = true;
   }
 
-  public static void ClearPresence()
+  public void ClearPresence()
   {
-    m_client.ClearPresence();
-    IsPresenceSet = false;
+    if (m_client.CurrentPresence != null)
+      m_client.ClearPresence();
   }
 }
