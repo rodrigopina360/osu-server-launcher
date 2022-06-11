@@ -20,13 +20,13 @@
     
     <MenuBar Grid.Row="1">
       <MenuBarItem x:Name="menubarItemLauncher" Title="Launcher">
-        <MenuFlyoutItem Text="Add Server" Click="AddServer_Click">
+        <MenuFlyoutItem Icon="Add" Text="Add Server" Click="AddServer_Click">
           <MenuFlyoutItem.KeyboardAccelerators>
             <KeyboardAccelerator Key="A" Modifiers="Control"/>
           </MenuFlyoutItem.KeyboardAccelerators>
         </MenuFlyoutItem>
         <MenuFlyoutSeparator/>
-        <MenuFlyoutItem Text="Settings" Click="Settings_Click">
+        <MenuFlyoutItem Icon="Setting" Text="Settings" Click="Settings_Click">
           <MenuFlyoutItem.KeyboardAccelerators>
             <KeyboardAccelerator Key="S" Modifiers="Control"/>
           </MenuFlyoutItem.KeyboardAccelerators>
@@ -48,6 +48,15 @@
     <InfoBar Grid.Row="2" x:Name="infoBar" />
 
     <Grid Margin="10,0,10,10" Grid.Row="3" ColumnDefinitions="150,*">
+      <!--Grid RowDefinitions="auto,auto,auto,*,auto">
+        <AppBarButton Icon="Add" VerticalAlignment="Top" HorizontalAlignment="Stretch" Height="32" Width="32" Margin="0" Padding="0"/>
+        <AppBarButton Margin="0,5,0,0" Grid.Row="1" Icon="Share" VerticalAlignment="Top" HorizontalAlignment="Stretch" Height="32" Width="32" Padding="0"/>
+        <AppBarButton Grid.Row="2" Icon="Edit" VerticalAlignment="Top" HorizontalAlignment="Stretch" Height="32" Width="32" Margin="0" Padding="0"/>
+
+        <AppBarButton Grid.Row="3" Icon="Help" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Height="32" Width="32" Margin="0" Padding="0"/>
+        <AppBarButton Grid.Row="4" Icon="Setting" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Height="32" Width="32" Margin="0" Padding="0"/>
+      </Grid-->
+
       <ListView ItemsSource="{x:Bind ViewModel.Servers,Mode=OneWay}"
               SelectedItem="{x:Bind ViewModel.SelectedServer,Mode=TwoWay}"
               SelectionChanged="ListView_SelectionChanged">
@@ -72,7 +81,7 @@
         </ListView.ItemTemplate>
       </ListView>
 
-      <Grid Grid.Column="1" RowDefinitions="auto,*,auto">
+      <Grid Grid.Column="2" RowDefinitions="auto,*,auto">
         <Grid ColumnDefinitions="auto,*">
           <Grid RowDefinitions="auto,auto">
             <Grid ColumnDefinitions="auto,*,auto">
