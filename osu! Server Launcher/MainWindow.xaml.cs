@@ -109,9 +109,9 @@ namespace osuserverlauncher
       }
       else
       {
-        ResourceDictionary theme = (ResourceDictionary) Application.Current.Resources.ThemeDictionaries[App.Current.RequestedTheme.ToString()];
+        ResourceDictionary theme = (ResourceDictionary)Application.Current.Resources.ThemeDictionaries[App.Current.RequestedTheme.ToString()];
         textBlockDescription.FontStyle = FontStyle.Normal;
-        textBlockDescription.Foreground = (SolidColorBrush) theme["TextForeground"];
+        textBlockDescription.Foreground = (SolidColorBrush)theme["TextForeground"];
         textBlockDescription.Text = manifest.Description;
       }
     }
