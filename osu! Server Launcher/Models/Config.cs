@@ -9,20 +9,20 @@ using osuserverlauncher.ViewModels;
 
 namespace osuserverlauncher.Models
 {
-  public class Config
-  {
-    [JsonProperty("servers")]
-    public List<Server> Servers { get; set; } = new List<Server>();
-
-    [JsonProperty("discord_rpc_enabled")]
-    public bool ShowDiscordRPC { get; set; } = false;
-
-    public static Config DefaultConfig => new Config()
+    public class Config
     {
-      Servers = new List<Server>()
+        [JsonProperty("servers")]
+        public List<Server> Servers { get; set; } = new List<Server>();
+
+        [JsonProperty("discord_rpc_enabled")]
+        public bool ShowDiscordRPC { get; set; } = false;
+
+        public static Config DefaultConfig => new Config()
+        {
+            Servers = new List<Server>()
       {
         Server.Bancho
       }
-    };
-  }
+        };
+    }
 }

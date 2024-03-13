@@ -9,17 +9,17 @@ using osuserverlauncher.Models;
 namespace osuserverlauncher.ViewModels;
 public class ServerDialogViewModel : PropertyChangedBase
 {
-  private ServerViewModel m_server = new ServerViewModel();
-  public ServerViewModel Server
-  {
-    get => m_server;
-    set => SetField(ref m_server, value);
-  }
+    private ServerViewModel m_server = new ServerViewModel();
+    public ServerViewModel Server
+    {
+        get => m_server;
+        set => SetField(ref m_server, value);
+    }
 
-  private bool m_serverAlreadyExists = false;
-  public bool ServerAlreadyExists
-  {
-    get => m_serverAlreadyExists;
-    set => SetField(ref m_serverAlreadyExists, value);
-  }
+    private bool m_serverAlreadyExists = false;
+    public bool ServerAlreadyExists
+    {
+        get => m_serverAlreadyExists;
+        set => SetField(ref m_serverAlreadyExists, value);
+    }
 }

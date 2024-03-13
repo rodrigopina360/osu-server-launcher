@@ -10,20 +10,20 @@ using System.Threading.Tasks;
 namespace osuserverlauncher.ViewModels;
 public abstract class PropertyChangedBase : INotifyPropertyChanged
 {
-  public event PropertyChangedEventHandler PropertyChanged;
-  private SynchronizationContext m_context;
+    public event PropertyChangedEventHandler PropertyChanged;
+    private SynchronizationContext m_context;
 
-  public PropertyChangedBase()
-  {
-    m_context = SynchronizationContext.Current;
-  }
+    public PropertyChangedBase()
+    {
+        m_context = SynchronizationContext.Current;
+    }
 
-  public void SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = "")
-  {
-    if (EqualityComparer<T>.Default.Equals(field, value))
-      return;
+    public void SetField<T>(ref T field, T value, [CallerMemberName] string propertyName = "")
+    {
+        if (EqualityComparer<T>.Default.Equals(field, value))
+            return;
 
-    field = value;
-    m_context.Post(_ => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName)), null);
-  }
+        field = value;
+        m_context.Post(_ => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName)), null);
+    }
 }

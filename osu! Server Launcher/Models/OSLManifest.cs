@@ -8,6 +8,6 @@ using System.Threading.Tasks;
 namespace osuserverlauncher.Models;
 public class OSLManifest
 {
-  [JsonProperty("description")]
-  public string Description { get; set; } = "";
+    [JsonProperty("description")]
+    public string Description { get; set; } = "";
 }

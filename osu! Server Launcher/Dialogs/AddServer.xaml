@@ -16,24 +16,24 @@
     DefaultButton="Primary" 
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-  <ContentDialog.Resources>
-    <converters:BoolVisibilityConverter x:Key="BoolVisibilityConverter"/>
-  </ContentDialog.Resources>
-  
-  <ScrollViewer>
-    <StackPanel>
-      <TextBlock Text="Please specify the following informations to connect to the server." />
-      <TextBlock Margin="0,5,0,0" Text="Server Name (e.g. 'cs0su')" />
-      <TextBox PlaceholderText="Server Name" Text="{x:Bind ViewModel.Server.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" TextChanged="UpdateIsPrimaryButtonEnabled" />
-      <TextBlock Visibility="{x:Bind ViewModel.ServerAlreadyExists,Mode=OneWay,Converter={StaticResource BoolVisibilityConverter}}" Margin="0,2,0,0" Text="A server with that name already exists." Foreground="IndianRed"/>
-      <TextBlock Margin="0,5,0,0" Text="Server Domain (e.g. 'cs0su.net')" />
-      <TextBox PlaceholderText="Server Domain" Text="{x:Bind ViewModel.Server.Domain,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" TextChanged="UpdateIsPrimaryButtonEnabled" />
-      <CheckBox x:Name="checkBoxAddCredentials" Checked="checkBoxAddCredentials_CheckedChanged" Unchecked="checkBoxAddCredentials_CheckedChanged" Content="Automatically log me in using my credentials" />
-      <TextBlock Visibility="{x:Bind checkBoxAddCredentials.IsChecked.Value,Mode=OneWay,Converter={StaticResource BoolVisibilityConverter}}" Margin="0,5,0,0" Text="Username (e.g. 'peppy')" />
-      <TextBox Visibility="{x:Bind checkBoxAddCredentials.IsChecked.Value,Mode=OneWay,Converter={StaticResource BoolVisibilityConverter}}" Text="{x:Bind ViewModel.Server.Credentials.Username,Mode=TwoWay}" PlaceholderText="Username" TextChanged="UpdateIsPrimaryButtonEnabled"/>
-      <TextBlock Visibility="{x:Bind checkBoxAddCredentials.IsChecked.Value,Mode=OneWay,Converter={StaticResource BoolVisibilityConverter}}" Margin="0,5,0,0" Text="Password (e.g. '●●●●●●●●')" />
-      <PasswordBox Visibility="{x:Bind checkBoxAddCredentials.IsChecked.Value,Mode=OneWay,Converter={StaticResource BoolVisibilityConverter}}" Password="{x:Bind ViewModel.Server.Credentials.PlainPassword,Mode=TwoWay}" PlaceholderText="Password" PasswordChanged="PasswordChanged"/>
-      <TextBlock Visibility="{x:Bind checkBoxAddCredentials.IsChecked.Value,Mode=OneWay,Converter={StaticResource BoolVisibilityConverter}}" Text="The login credentials are securely stored on your computer." />
-    </StackPanel>
-  </ScrollViewer>
+    <ContentDialog.Resources>
+        <converters:BoolVisibilityConverter x:Key="BoolVisibilityConverter"/>
+    </ContentDialog.Resources>
+
+    <ScrollViewer>
+        <StackPanel>
+            <TextBlock Text="Please specify the following informations to connect to the server." />
+            <TextBlock Margin="0,5,0,0" Text="Server Name (e.g. 'cs0su')" />
+            <TextBox PlaceholderText="Server Name" Text="{x:Bind ViewModel.Server.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" TextChanged="UpdateIsPrimaryButtonEnabled" />
+            <TextBlock Visibility="{x:Bind ViewModel.ServerAlreadyExists,Mode=OneWay,Converter={StaticResource BoolVisibilityConverter}}" Margin="0,2,0,0" Text="A server with that name already exists." Foreground="IndianRed"/>
+            <TextBlock Margin="0,5,0,0" Text="Server Domain (e.g. 'cs0su.net')" />
+            <TextBox PlaceholderText="Server Domain" Text="{x:Bind ViewModel.Server.Domain,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" TextChanged="UpdateIsPrimaryButtonEnabled" />
+            <CheckBox x:Name="checkBoxAddCredentials" Checked="checkBoxAddCredentials_CheckedChanged" Unchecked="checkBoxAddCredentials_CheckedChanged" Content="Automatically log me in using my credentials" />
+            <TextBlock Visibility="{x:Bind checkBoxAddCredentials.IsChecked.Value,Mode=OneWay,Converter={StaticResource BoolVisibilityConverter}}" Margin="0,5,0,0" Text="Username (e.g. 'peppy')" />
+            <TextBox Visibility="{x:Bind checkBoxAddCredentials.IsChecked.Value,Mode=OneWay,Converter={StaticResource BoolVisibilityConverter}}" Text="{x:Bind ViewModel.Server.Credentials.Username,Mode=TwoWay}" PlaceholderText="Username" TextChanged="UpdateIsPrimaryButtonEnabled"/>
+            <TextBlock Visibility="{x:Bind checkBoxAddCredentials.IsChecked.Value,Mode=OneWay,Converter={StaticResource BoolVisibilityConverter}}" Margin="0,5,0,0" Text="Password (e.g. '●●●●●●●●')" />
+            <PasswordBox Visibility="{x:Bind checkBoxAddCredentials.IsChecked.Value,Mode=OneWay,Converter={StaticResource BoolVisibilityConverter}}" Password="{x:Bind ViewModel.Server.Credentials.PlainPassword,Mode=TwoWay}" PlaceholderText="Password" PasswordChanged="PasswordChanged"/>
+            <TextBlock Visibility="{x:Bind checkBoxAddCredentials.IsChecked.Value,Mode=OneWay,Converter={StaticResource BoolVisibilityConverter}}" Text="The login credentials are securely stored on your computer." />
+        </StackPanel>
+    </ScrollViewer>
 </ContentDialog>

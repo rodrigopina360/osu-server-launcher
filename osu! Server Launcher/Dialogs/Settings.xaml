@@ -10,10 +10,10 @@
     CloseButtonText="Close"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-  <ScrollViewer>
-    <StackPanel>
-      <TextBlock Text="You can customize everything about the client and it's features here." />
-      <ToggleSwitch OnContent="Show Discord RPC" OffContent="Show Discord RPC" />
-    </StackPanel>
-  </ScrollViewer>
+    <ScrollViewer>
+        <StackPanel>
+            <TextBlock Text="You can customize everything about the client and it's features here." />
+            <ToggleSwitch OnContent="Show Discord RPC" OffContent="Show Discord RPC" />
+        </StackPanel>
+    </ScrollViewer>
 </ContentDialog>

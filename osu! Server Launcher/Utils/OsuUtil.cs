@@ -11,26 +11,26 @@ namespace osuserverlauncher.Utils
 {
     public class OsuUtil
     {
-    public static void SetServerCredentials(string configFile, ServerViewModel server)
-    {
-        string[] lines = File.ReadAllLines(configFile);
-        for (int i = 0; i < lines.Length; i++)
-        if (lines[i].StartsWith("Username ="))
-            lines[i] = $"Username = {server.Credentials.Username}";
-        else if (lines[i].StartsWith("Password ="))
-            lines[i] = $"Password = {server.Credentials.PlainPassword}";
-        else if (lines[i].StartsWith("SaveUsername ="))
-            lines[i] = $"SaveUsername = 1";
-        else if (lines[i].StartsWith("SavePassword ="))
-            lines[i] = $"SavePassword = 1";
-        else if (lines[i].StartsWith("CredentialEndpoint ="))
-            lines[i] = $"CredentialEndpoint = {(server.IsBancho ? "" : server.Domain)}";
+        public static void SetServerCredentials(string configFile, ServerViewModel server)
+        {
+            string[] lines = File.ReadAllLines(configFile);
+            for (int i = 0; i < lines.Length; i++)
+                if (lines[i].StartsWith("Username ="))
+                    lines[i] = $"Username = {server.Credentials.Username}";
+                else if (lines[i].StartsWith("Password ="))
+                    lines[i] = $"Password = {server.Credentials.PlainPassword}";
+                else if (lines[i].StartsWith("SaveUsername ="))
+                    lines[i] = $"SaveUsername = 1";
+                else if (lines[i].StartsWith("SavePassword ="))
+                    lines[i] = $"SavePassword = 1";
+                else if (lines[i].StartsWith("CredentialEndpoint ="))
+                    lines[i] = $"CredentialEndpoint = {(server.IsBancho ? "" : server.Domain)}";
 
-        File.WriteAllLines(configFile, lines);
-    }
+            File.WriteAllLines(configFile, lines);
+        }
 
-    public static string GetOsuPath()
-    {
+        public static string GetOsuPath()
+        {
             if (File.Exists(Path.Combine(Environment.GetEnvironmentVariable("localappdata"), "osu!", "osu!.exe")))
             {
                 return Path.Combine(Environment.GetEnvironmentVariable("localappdata"), "osu!");
@@ -48,7 +48,7 @@ namespace osuserverlauncher.Utils
 
                 return osudir;
             }
-            catch 
+            catch
             {
                 return null;
             }
